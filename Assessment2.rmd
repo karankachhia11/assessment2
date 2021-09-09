@@ -1,0 +1,165 @@
+---
+title: "assessment2.rmd"
+author: "Karan"
+date: "09/09/2021"
+output: html_document
+---
+```{r}
+library(rmarkdown)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## *karan kachhia*  STUDENT ID **s4644245**
+***
+# "ASSIGNMENT 2"
+***
+image: ![](C:\Users\karan\OneDrive\Desktop/Karan.png)
+
+### The first 10 rows of the dataset
+```{r}
+library(here)
+thanks<-read.csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-11-20/thanksgiving_meals.csv')
+knitr::kable(head(thanks[, 1:10]), "simple")
+```
+```{r}
+library(dplyr) 
+library(ggplot2) 
+library(forcats)
+library(skimr)
+thanks$income <- factor(thanks$family_income)
+#fct_reorder(thanks$income)
+#ggplot(thanks, aes(x = celebrate, y = family_income)) + 
+#geom_point() + 
+#facet_wrap(~ fct_reorder(factor(family_income), celebrate))
+```
+### Generate the general statistics of the dataset using `summary()` and `skim()` 
+```{r}
+skim(thanks)
+```
+### What is the number of people who celebrate
+```{r}
+table(thanks$celebrate)
+```
+### What are categories and stats for each main dish served and the method it is prepared?
+```{r}
+table(thanks$main_dish,thanks$main_prep)
+```
+### Data Visualization using Main_dish  and income (3 representations done)
+
+```{r}
+library(COUNT)
+dat <- data.frame(table(thanks$income,thanks$main_dish))
+names(dat) <- c("income","main_dish","Count")
+ggplot(data=dat, aes(x=main_dish, y=Count, fill=income)) + geom_bar(stat="identity")
+```
+
+### Data visualization using the Main_dish and people celebrating category
+
+```{r}
+dat1 <- data.frame(table(thanks$celebrate,thanks$main_dish))
+names(dat1) <- c("celebrate","main_dish","Count")
+ggplot(data=dat1, aes(x=main_dish, y=Count, fill=celebrate)) + geom_bar(stat="identity")
+
+```
+
+### Data visualization using the Main_dish and the us_region
+```{r}
+
+dat2 <- data.frame(table(thanks$us_region,thanks$main_dish))
+names(dat2) <- c("us_region","main_dish","Count")
+ggplot(data=dat2, aes(x=main_dish, y=Count, fill=us_region)) + geom_bar(stat="identity")
+```
+### How many use cranberry sauce? How many use gravy?
+```{r}
+table(thanks$cranberry)
+table(thanks$gravy)
+```
+### What is the distribution of those who celebrate across income ranges
+```{r}
+celebrt<-thanks[thanks$celebrate=="Yes", ]
+```
+### Present this information in the most evident way on the data viz.
+```{r}
+library(plyr)
+count(celebrt,'income')
+ggplot(celebrt,
+      aes(factor(income))) +
+    geom_bar(fill = "coral",
+        alpha = 0.9) +
+        theme(text=element_text(size = 7.5))
+```
+### What are the most common pies, sides, and desserts?Present this information on a data viz
+```{r}
+pies<-thanks[c(27,28,29,30,31,32,33,34,35,36,37,38,39)]
+t1<-table(pies$pie1)
+t2<-table(pies$pie2)
+t3<-table(pies$pie3)
+t4<-table(pies$pie4)
+t5<-table(pies$pie5)
+t6<-table(pies$pie6)
+t7<-table(pies$pie7)
+t8<-table(pies$pie8)
+t9<-table(pies$pie9)
+t10<-table(pies$pie10)
+t11<-table(pies$pie11)
+t12<-table(pies$pie12)
+t13<-table(pies$pie13)
+pie_summary<-c(t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13)
+list(pie_summary)
+hist(pie_summary)
+
+```
+```{r}
+sides<-thanks[c(12,13,14,15,16,17,18,19,20,21,22,23,24,25,26)]
+s1<-table(sides$side1)
+s2<-table(sides$side2)
+s3<-table(sides$side3)
+s4<-table(sides$side4)
+s5<-table(sides$side5)
+s6<-table(sides$side6)
+s7<-table(sides$side7)
+s8<-table(sides$side8)
+s9<-table(sides$side9)
+s10<-table(sides$side10)
+s11<-table(sides$side11)
+s12<-table(sides$side12)
+s13<-table(sides$side13)
+s14<-table(sides$side14)
+s15<-table(sides$side15)
+side_summary<-c(s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15)
+list(side_summary)
+max(side_summary)
+hist(side_summary)
+```
+```{r}
+dess<-thanks[c(40,41,42,43,44,45,46,47,48,49,50)]
+d1<-table(dess$dessert1)
+d2<-table(dess$dessert2)
+d3<-table(dess$dessert3)
+d4<-table(dess$dessert4)
+d5<-table(dess$dessert5)
+d6<-table(dess$dessert6)
+d7<-table(dess$dessert7)
+d8<-table(dess$dessert8)
+d9<-table(dess$dessert9)
+d10<-table(dess$dessert10)
+d11<-table(dess$dessert11)
+
+dess_summary<-c(d1,d2,d3,d4,d5,d6,d7,d8,d9,d10,d11)
+list(dess_summary)
+max(dess_summary)
+hist(dess_summary)
+```
+### How do the servings differ by income?
+```{r}
+table(thanks$income,thanks$main_dish)
+```
+### Present this information on a data viz
+```{r}
+dat5 <- data.frame(table(thanks$income,thanks$main_dish))
+names(dat5) <- c("income","main_dish","Count")
+ggplot(data=dat5, aes(x=income, y=Count, fill=main_dish)) + geom_bar(stat="identity")+theme(text=element_text(size = 7.5))
+```
+
